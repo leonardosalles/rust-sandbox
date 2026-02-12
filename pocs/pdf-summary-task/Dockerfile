@@ -6,9 +6,14 @@ RUN cargo build --release
 
 FROM debian:bookworm-slim
 
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
+
 COPY --from=builder /app/target/release/pdf-summary-task /app/task
 
-EXPOSE 8080
+RUN chmod +x /app/task
 
-CMD ["./task"]
+CMD ["/app/task"]
