@@ -1,0 +1,36 @@
+{
+  "name": "pdf-summary",
+  "title": "PDF Summary",
+  "version": "1.0.0",
+  "description": "Receives a PDF from S3 and returns a summarized text",
+  "inputSchema": {
+    "parameters": [
+      {
+        "type": "text",
+        "field": "s3_input_uri",
+        "label": "PDF S3 URI",
+        "required": true
+      },
+      {
+        "type": "text",
+        "field": "s3_output_uri",
+        "label": "Output S3 URI",
+        "required": true
+      },
+      {
+        "type": "text",
+        "field": "openai_api_key",
+        "label": "OpenAI API Key",
+        "required": true
+      }
+    ]
+  },
+  "outputSchema": {
+    "fields": [
+      {
+        "type": "text",
+        "field": "summary"
+      }
+    ]
+  }
+}
