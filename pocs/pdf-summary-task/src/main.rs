@@ -2,6 +2,7 @@ mod handler;
 mod s3;
 
 use std::env;
+use tokio;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
