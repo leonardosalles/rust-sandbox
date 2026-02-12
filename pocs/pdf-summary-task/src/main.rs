@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Processing PDF from: {}", s3_uri);
     println!("Output will be saved to: {}", s3_output_uri);
 
-    handler::process_pdf(&s3_uri, &s3_output_uri).await?;
+    handler::process_pdf(&s3_uri, &s3_output_uri, &openai_api_key).await?;
 
     println!("PDF processing completed successfully");
     Ok(())

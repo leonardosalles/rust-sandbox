@@ -1,6 +1,8 @@
 use serde_json::json;
 use std::fs;
 use pdf_extract::extract_text;
+use std::io::Write;
+use tempfile::NamedTempFile;
 use reqwest::Client;
 
 use crate::s3::{download_s3_file, upload_s3_file};
@@ -32,7 +34,11 @@ pub async fn process_pdf(s3_uri: &str, s3_output_uri: &str, openai_api_key: &str
 fn extract_text_from_pdf(pdf_bytes: &[u8]) -> Result<String, Box<dyn std::error::Error>> {
     println!("Extracting text from PDF...");
     
-    let text = extract_text(std::io::Cursor::new(pdf_bytes))?;
+    // Create a temporary file to store the PDF
+    let mut temp_file = NamedTempFile::new()?;
+    temp_file.write_all(pdf_bytes)?;
+    
+    let text = extract_text(temp_file.path())?;
     
     if text.trim().is_empty() {
         return Err("No text could be extracted from PDF".into());

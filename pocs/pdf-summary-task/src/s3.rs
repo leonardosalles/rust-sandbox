@@ -32,7 +32,7 @@ pub async fn upload_s3_file(
         .put_object()
         .bucket(bucket)
         .key(key)
-        .body(data.into())
+        .body(data.to_vec().into())
         .send()
         .await?;
 
