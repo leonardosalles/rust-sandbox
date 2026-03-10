@@ -314,15 +314,15 @@ kata-data-rust/
 
 ## Diferencial vs Java/Scala
 
-| Aspecto | Java (colega) | Rust (esta POC)                |
-| ------- | ------------- | ------------------------------ |
-| Runtime | JVM (Spark)   | Nativo, zero overhead          |
-| Startup | ~5-10s        | <100ms                         |
-| Memory  | 512MB+        | ~20MB                          |
-| Engine  | Spark SQL     | Apache DataFusion              |
-| SOAP    | Apache CXF    | Rust nativo (axum + quick-xml) |
-| Build   | sbt           | cargo                          |
-| Deploy  | JAR + JVM     | Single binary                  |
+| Aspecto | Java        | Rust                           |
+| ------- | ----------- | ------------------------------ |
+| Runtime | JVM (Spark) | Nativo, zero overhead          |
+| Startup | ~5-10s      | <100ms                         |
+| Memory  | 512MB+      | ~20MB                          |
+| Engine  | Spark SQL   | Apache DataFusion              |
+| SOAP    | Apache CXF  | Rust nativo (axum + quick-xml) |
+| Build   | sbt         | cargo                          |
+| Deploy  | JAR + JVM   | Single binary                  |
 
 ---
 
