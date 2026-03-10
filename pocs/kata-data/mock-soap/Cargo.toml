@@ -1,0 +1,17 @@
+[package]
+name = "mock-soap"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "mock-soap"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.7", features = ["json"] }
+tower = "0.4"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+chrono = "0.4"
+rand = "0.8"

@@ -1,0 +1,77 @@
+[workspace]
+members = [".", "mock-soap"]
+resolver = "2"
+
+[package]
+name = "kata-data-rust"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "kata_data_rust"
+path = "src/lib.rs"
+
+[[bin]]
+name = "pipeline"
+path = "src/main.rs"
+
+[[bin]]
+name = "api"
+path = "src/api/main.rs"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# DataFusion - SQL/analytics engine
+datafusion = "43"
+
+# SQLite
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+# HTTP / API
+axum = { version = "0.7", features = ["json"] }
+
+# OpenAPI + Scalar docs
+utoipa = { version = "4", features = ["axum_extras", "chrono"] }
+utoipa-scalar = { version = "0.2", features = ["axum"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# HTTP client (for SOAP consumer)
+reqwest = { version = "0.12", features = ["json"] }
+
+# XML parsing
+quick-xml = { version = "0.36", features = ["serialize", "async-tokio"] }
+
+# OpenTelemetry
+opentelemetry = "0.24"
+opentelemetry_sdk = { version = "0.24", features = ["rt-tokio", "trace"] }
+opentelemetry-stdout = { version = "0.5" }
+tracing = "0.1"
+tracing-opentelemetry = "0.25"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Prometheus metrics
+prometheus = { version = "0.13", features = ["process"] }
+
+# CSV
+csv = "1"
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4"] }
+
+# Async traits
+async-trait = "0.1"
+
+[dev-dependencies]
+tokio-test = "0.4"

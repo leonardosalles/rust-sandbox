@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+  # ─── Mock SOAP WS-* Service ───────────────────────────────────
+  mock-soap:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.soap
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/wsdl"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ─── Pipeline Runner ──────────────────────────────────────────
+  pipeline:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.pipeline
+    depends_on:
+      mock-soap:
+        condition: service_healthy
+    volumes:
+      - pipeline-data:/app/data
+    environment:
+      - RUST_LOG=info
+      - SOAP_URL=http://mock-soap:8081/soap/sales
+
+  # ─── REST API ─────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pipeline
+    volumes:
+      - pipeline-data:/app/data
+    environment:
+      - RUST_LOG=info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ─── Prometheus ───────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+
+  # ─── Grafana ──────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+volumes:
+  pipeline-data:
+  grafana-data:
